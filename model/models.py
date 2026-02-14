@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# In[1]:
+
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -28,7 +31,10 @@ from sklearn.metrics import (
     roc_auc_score
 )
 
-# Preprocess
+
+# In[2]:
+
+
 def preprocess_data(X, y):
 
     # Encode target if categorical
@@ -51,7 +57,9 @@ def preprocess_data(X, y):
     return X_train, X_test, y_train, y_test
 
 
-# Train models
+# In[3]:
+
+
 def train_logistic_regression(X_train, y_train):
     model = LogisticRegression(max_iter=1000)
     model.fit(X_train, y_train)
@@ -68,6 +76,9 @@ def train_knn(X_train, y_train):
     model = KNeighborsClassifier(n_neighbors=9)
     model.fit(X_train, y_train)
     return model
+
+
+# In[4]:
 
 
 def train_bayes(X_train, y_train):
@@ -88,7 +99,9 @@ def train_xgboost(X_train, y_train):
     return model
 
 
-# Evaluate
+# In[5]:
+
+
 def evaluate_model(model, X_test, y_test):
 
     y_pred = model.predict(X_test)
@@ -114,4 +127,49 @@ def evaluate_model(model, X_test, y_test):
     report = classification_report(y_test, y_pred, output_dict=True)
 
     return metrics, cm, report
+
+
+# In[6]:
+
+
+def run_model_pipeline(file_path, model_name):
+    # Load dataset
+    df = pd.read_csv(file_path, sep=';')
+
+    X = df.drop('y', axis=1)
+    y = df['y']
+
+    # Preprocess
+    X_train, X_test, y_train, y_test = preprocess_data(X, y)
+
+    model_funcs = {
+        "Logistic Regression": train_logistic_regression,
+        "Decision Tree": train_decision_tree,
+        "K-Nearest Neighbors": train_knn,
+        "Naive Bayes": train_bayes,
+        "Random Forest": train_randomforest,
+        "XGBoost": train_xgboost
+    }
+
+    if model_name not in model_funcs:
+        raise ValueError("Invalid model name selected.")
+
+    model = model_funcs[model_name](X_train, y_train)
+
+    metrics, cm, report = evaluate_model(model, X_test, y_test)
+
+    return metrics, cm, report
+
+
+# In[14]:
+
+
+# metrics, cm, report = run_model_pipeline("bank.csv", "Naive Bayes")
+# pd.DataFrame(metrics.items(), columns=["Metric", "Value"])
+
+
+# In[ ]:
+
+
+
 

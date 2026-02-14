@@ -1,4 +1,4 @@
-# Bank Marketing Classification – Machine Learning Project
+# Machine Learning Classification models and Evaluation metrics
 
 ## Project Statement
 This project builds and evaluates multiple machine learning classification models using the UCI Bank Marketing Dataset.

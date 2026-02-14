@@ -19,8 +19,25 @@ st.set_page_config(page_title="ML Model Comparison", layout="wide")
 
 st.title("Machine Learning Classification Models")
 
-# Upload dataset
-uploaded_file = st.file_uploader("Upload your dataset CSV", type="csv")
+# Upload & Download
+col1, col2 = st.columns(2)
+
+with col1:
+    uploaded_file = st.file_uploader("Upload your dataset CSV", type="csv")
+
+with col2:
+    st.write("Download Sample Dataset")
+    try:
+        with open("bank.csv", "rb") as file:
+            st.download_button(
+                label="Download bank.csv",
+                data=file,
+                file_name="bank.csv",
+                mime="text/csv"
+            )
+    except FileNotFoundError:
+        st.warning("bank.csv not found in repository.")
+
 if uploaded_file:
     df = pd.read_csv(uploaded_file, sep=';')
     st.success("Dataset loaded successfully!")
