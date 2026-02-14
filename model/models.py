@@ -99,12 +99,15 @@ def evaluate_model(model, X_test, y_test):
     except:
         auc = "Not applicable"
 
+    mcc = matthews_corrcoef(y_test, y_pred)
+
     metrics = {
         "Accuracy": accuracy_score(y_test, y_pred),
         "Precision": precision_score(y_test, y_pred, average='weighted'),
         "Recall": recall_score(y_test, y_pred, average='weighted'),
         "F1 Score": f1_score(y_test, y_pred, average='weighted'),
-        "AUC": auc
+        "AUC": auc,
+        "Matthews Correlation Coefficient (MCC Score)": mcc
     }
 
     cm = confusion_matrix(y_test, y_pred)
